@@ -3,6 +3,48 @@ from dataclasses import dataclass
 from slplayer import db
 
 @dataclass
+class Albums(db.Model):
+    """Artist class"""
+
+    __tablename__ = "album"
+    album_id:str = db.Column(db.Integer,primary_key=True)
+    name:str = db.Column(db.String(50))
+    cover:str = db.Column(db.String(50))
+    artist:str = db.Column(db.String(50))
+
+    def __init__(self,id:int,name:str,cover:str):
+        """initialize Albums class
+
+        Args:
+            id (int): Albums id
+            name (str): Albums name
+
+        Returns:
+            _type_: _description_
+        """
+        self.album_id:str = id
+        self.name:str = name
+        self.cover = cover
+
+    def __repr__(self):
+        """return official representation
+
+        Returns:
+            string : id
+        """
+        return self.album_id
+
+    def __str__(self):
+        """return unofficial rpresentation
+
+        Returns:
+            string : name+id
+        """
+
+        return self.name+"with id: "+self.album_id
+
+
+@dataclass
 class Track():
     """track class"""
 
@@ -71,7 +113,7 @@ class User(UserMixin,db.Model):
     username: str = db.Column(db.String(45))
     email: str = db.Column(db.String(45))
     password: str = db.Column(db.String(45))
-    fav_artist: str = db.Column(db.String(45))
+    fav_artist: str = db.Column(db.String(45),)
     fav_style: str = db.Column(db.String(45))
 
     def get_id(self):
@@ -82,7 +124,7 @@ class User(UserMixin,db.Model):
         """
         return self.user_id
 
-    def __init__(self,name,username,email,password,fav_artist,fav_style) -> None:
+    def __init__(self,name,username,email,password,fav_artist) -> None:
         """initialize user class
 
         Args:
@@ -98,7 +140,6 @@ class User(UserMixin,db.Model):
         self.username = username
         self.password = password
         self.fav_artist = fav_artist
-        self.fav_style = fav_style
 
     def __repr__(self) -> str:
         """return formal string representation of class

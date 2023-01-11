@@ -29,3 +29,8 @@ app.register_blueprint(track,url_prefix='/track')
 
 from .auth import auth
 app.register_blueprint(auth,url_prefix='/auth')
+
+from .album import album
+app.register_blueprint(album,url_prefix='/albums')
+
+

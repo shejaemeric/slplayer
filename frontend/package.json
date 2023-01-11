@@ -1,8 +1,16 @@
 {
   "name": "frontend",
-  "packageManager": "yarn@3.3.0",
+  "dependencies": {
+    "sass-loader": "^13.2.0",
+    "vue-cli-plugin-vuetify": "^2.5.8",
+    "vuetify": "^2.6.0"
+  },
   "devDependencies": {
     "eslint": "^8.29.0",
-    "eslint-plugin-vue": "^9.8.0"
-  }
+    "eslint-plugin-vue": "^9.8.0",
+    "sass": "~1.32.0",
+    "sass-loader": "^10.0.0",
+    "vuetify-loader": "^1.7.0"
+  },
+  "packageManager": "yarn@3.3.0"
 }

@@ -1,17 +1,28 @@
 <template>
   <div class="container">
-    <AuthDivVue></AuthDivVue>
+    <AuthComponent></AuthComponent>
   </div>
 </template>
 
 <script>
-import AuthDivVue from "@/components/AuthDiv.vue";
+import AuthComponent from "@/components/auth/AuthComponent.vue";
 
 export default {
   name: "AuthView",
   components: {
-    AuthDivVue,
+    AuthComponent,
   },
+  created (){
+    var token = localStorage.getItem('jwt')
+    var name = localStorage.getItem('name')
+    var fav_artist = localStorage.getItem('fav_artist')
+    if (token){
+        this.$router.push({name:"home",params:{
+            name,
+            fav_artist,
+        }})
+    }
+  }
 };
 </script>
 

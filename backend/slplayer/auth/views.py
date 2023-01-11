@@ -1,10 +1,10 @@
 from werkzeug.security import generate_password_hash,check_password_hash
-from flask_login import login_user,logout_user,login_required
 from flask import jsonify,request
 from . import auth
-from .. import db,login_manager
+from .. import db
 from models import User
-
+import jwt
+import json
 
 
 @auth.route('/login',methods=['POST'])
@@ -15,21 +15,24 @@ def login():
     Returns:
         user: object
     """
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        remember = True if request.form['remember'] else False
+
+    username = request.form['username']
+    password = request.form['password']
+
 
     user = User.query.filter_by(username=username).first()
     if not user:
-        return jsonify({"error":"User Does Not Exists"})
+        return jsonify({"error":"User Does Not Exists"}),401
 
 
     if not (check_password_hash(user.password,password)):
-        return({"error":"Incorrect Username or/and Password"})
-    delattr(user,"password")
-    login_user(user,remember=remember)
-    return jsonify({"data":user})
+        return({"error":"Incorrect Username or/and Password"}),401
+
+    token = jwt.encode({'user_id':user.user_id,"user_name":user.name,"fav_artist":user.fav_artist,},"secretkey051!",algorithm='HS256')
+    decoded_token = jwt.decode(token,"secretkey051!",algorithms='HS256')
+    result = {"token":token,"name":user.name,"fav_artist":user.fav_artist,"username":user.username}
+    print(result)
+    return jsonify(result),200
 
 
 
@@ -48,21 +51,23 @@ def signup():
         password = request.form['password']
         username = request.form['username']
         fav_artist = request.form['fav_artist']
-        fav_style = request.form['fav_style']
+        fav_style = "null"
+
 
     user = User.query.filter_by(email = email).first()
     if not user:
          user = User.query.filter_by(username = username).first()
     if user:
-        return jsonify({"error":"User already exists"})
+        return jsonify({"error":"Username already exists"}),401
 
     password = generate_password_hash(password, method='sha256')
 
-    new_user = User(name,username,email,password,fav_artist,fav_style)
+    new_user = User(name,username,email,password,fav_artist)
     db.session.add(new_user)
     db.session.commit()
-    new_user.password = "null"
-    return jsonify({"data":new_user})
+    token = jwt.encode({'user_id':new_user.user_id,"user_name":new_user.name,"fav_artist":new_user.fav_artist,},"secretkey051!",algorithm='HS256')
+    decoded_token = jwt.decode(token,"secretkey051!",algorithms='HS256')
+    return jsonify({"token":token,"name":new_user['name'],"fav_artist":new_user['fav_artist'],"username":['new_user.username']}),201
 
 @auth.route('/logout', methods=['GET'])
 def logout():
@@ -72,9 +77,18 @@ def logout():
     Returns:
         _type_: _description_
     """
-    logout_user()
-    return ({"Success":"Log Out Successful"})
+    return ({"Success":"Log Out Successful"}),200
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
+
+# def auth_required(func):
+#     def wrapper(*args,**kwargs):
+#         """get JWT from request header"""
+#         token = request.headers.get('Authorization')
+
+#         if not token:
+#             return jsonify({"error":"Token is required"}),401
+
+#         try:
+#             user = jwt.decode(token,"secretkey051!",algorithms='HS256')
+#         except jwt.InvalidTokenError:
+#             return jsonify({"error":"Invalid Token"}),401
