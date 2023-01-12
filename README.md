@@ -1,4 +1,4 @@
-# Project Name: SL PLAYER
+# Project SL PLAYER
     
 This web app is built using Vue.js, MySQL, and Python Flask. It utilizes the Spotify API to provide users with the ability to play and download their favorite songs, as well as recognize songs. The user interface is simple and easy to use, allowing users to search for and play songs and download tracks for offline listening.
 
