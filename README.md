@@ -4,8 +4,7 @@ This web app is built using Vue.js, MySQL, and Python Flask. It utilizes the Spo
 
 The backend of the app is built using Python Flask, which communicates with the Spotify API to access song and playlist data, as well as to perform various actions such as playing and downloading songs. It also communicates with the MySQL database to store and retrieve user data. The app is designed to be scalable and secure.
 
-##screenshot
-![Screenshot](https://i.ibb.co/P1CBH3Z/Screenshot-from-2023-01-12-18-33-39.png)
+![image](https://i.ibb.co/P1CBH3Z/Screenshot-from-2023-01-12-18-33-39.png)
 
 ## Landing Page
 https://shejaemeric.com/sl-player/
